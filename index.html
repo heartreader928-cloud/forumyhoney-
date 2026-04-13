@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Card</title>
+
+<style>
+body {
+  margin:0;
+  font-family:sans-serif;
+  background:black;
+  color:white;
+  overflow:hidden;
+}
+
+.page {
+  display:none;
+  height:100vh;
+  width:100%;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  padding:20px;
+  position:relative;
+}
+
+.active { display:flex; }
+
+button {
+  padding:12px 20px;
+  margin:10px;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+/* 🌌 REAL COMET ANIMATION */
+.comet {
+  position:absolute;
+  width:2px;
+  height:100px;
+  background:linear-gradient(white, transparent);
+  opacity:0.6;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-100vh) translateX(0); }
+  100% { transform: translateY(100vh) translateX(200px); }
+}
+
+/* 🎉 CONFETTI */
+.confetti div {
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:white;
+  animation: drop 3s linear infinite;
+}
+@keyframes drop {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+/* typing cursor */
+.typing::after {
+  content:"|";
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  50% { opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGES -->
+<div class="page active" id="p1">
+  <h2 id="t1"></h2>
+  <p id="t2"></p>
+  <button onclick="nextPage(2)">Next</button>
+</div>
+
+<div class="page" id="p2">
+  <h3 id="t3"></h3>
+  <p>Kaisa laga mere saath rehkr?</p>
+  <button onclick="wrong()">Accha</button>
+  <button onclick="wrong()">Bohot bekar</button>
+  <button onclick="wrong()">Best</button>
+  <button onclick="nextPage(3)">I can't express ❤️</button>
+</div>
+
+<div class="page" id="p3">
+  <h3>Gift chahiye?? 🎁</h3>
+  <button id="yes" onclick="tapYes()">YES</button>
+  <button onclick="growYes()">NO</button>
+</div>
+
+<div class="page" id="p4">
+  <div id="confetti"></div>
+  <h2 id="t4"></h2>
+  <p id="t5"></p>
+  <button id="next4" style="display:none;" onclick="nextPage(5)">Next</button>
+</div>
+
+<div class="page" id="p5">
+  <h2 id="t6"></h2>
+</div>
+
+<script>
+
+/* PAGE SWITCH */
+function nextPage(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  let page = document.getElementById('p'+n);
+  page.classList.add('active');
+
+  runTyping(n);
+}
+
+/* TYPING EFFECT */
+function type(el,text,speed=30){
+  el.innerHTML="";
+  let i=0;
+  function t(){
+    if(i<text.length){
+      el.innerHTML+=text[i++];
+      setTimeout(t,speed);
+    }
+  }
+  t();
+}
+
+/* RUN TEXT PER PAGE */
+function runTyping(p){
+  if(p==1){
+    type(t1,"Hello it's your best friend Sameer 🎁");
+    setTimeout(()=>type(t2,"A small gift for u"),1000);
+  }
+  if(p==2){
+    type(t3,"Sorry bro birthday ke din kuch diya nahi 😅");
+  }
+  if(p==4){
+    type(t4,"🎉 Happy Birthday Prince 🎉");
+    type(t5,
+`Mera bhai hai tu 🤭
+Tere saath bohot maza aata hai
+Tere parents khush rahe
+Tu successful ho life me
+
+Love life thodi kharab hai 😆 koi na
+Believe in God plans 🙏
+
+Hamesha khush rehna
+Kuch hoga to batana
+Main hu tere liye hamesha 💙
+
+Sorry block ki dhamkiyon ke liye 😭`,10);
+
+    setTimeout(()=>next4.style.display='block',10000);
+  }
+  if(p==5){
+    type(t6,"THANK YOU ❤️");
+  }
+}
+
+/* START FIRST PAGE */
+runTyping(1);
+
+/* YES GAME */
+let taps=0;
+function tapYes(){
+  taps++;
+  yes.style.transform=`scale(${1+taps})`;
+  if(taps>=7) nextPage(4);
+}
+function growYes(){
+  yes.style.transform="scale(2)";
+}
+
+function wrong(){
+  alert("Sach bol 😏");
+}
+
+/* 🌌 CREATE COMETS */
+function createComets(){
+  for(let i=0;i<25;i++){
+    let c=document.createElement("div");
+    c.className="comet";
+    c.style.left=Math.random()*100+"%";
+    c.style.animationDuration=(Math.random()*3+2)+"s";
+    document.body.appendChild(c);
+  }
+}
+createComets();
+
+/* 🎉 CONFETTI */
+let conf=document.getElementById("confetti");
+for(let i=0;i<40;i++){
+  let d=document.createElement("div");
+  d.style.left=Math.random()*100+"%";
+  d.style.animationDuration=(Math.random()*3+2)+"s";
+  conf.appendChild(d);
+}
+
+</script>
+
+</body>
+  </html>
